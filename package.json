@@ -26,7 +26,6 @@
     "express",
     "monk",
     "MongoDB",
-    "passport",
     "log4js",
     "request-promise",
     "bcryptjs"
