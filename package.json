@@ -1,0 +1,36 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "NodeJS chat",
+  "main": "chat.js",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
+    "express": "^4.16.2",
+    "http": "0.0.0",
+    "log4js": "^2.3.12",
+    "mongodb": "^2.2.33",
+    "monk": "^6.0.5",
+    "request-promise": "^4.2.2",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodeJS",
+    "socket.io",
+    "chat",
+    "express",
+    "monk",
+    "MongoDB",
+    "passport",
+    "log4js",
+    "request-promise",
+    "bcryptjs"
+  ],
+  "author": "Nadezhda Gorenok",
+  "license": "ISC"
+}

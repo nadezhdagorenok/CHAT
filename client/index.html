@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat</title>
+    <link rel="stylesheet" href = "./style.css" type="text/css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+    <script src="./client.js" charset="utf-8" type="application/javascript"></script>
+    <script src="https://use.fontawesome.com/590e91babc.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Montez" rel="stylesheet">
+
+
+</head>
+<body>
+<div id="box" >
+    <!-- спрятанный якорь, чтобы избежать прыжков  -->
+    <a class="hiddenanchor" id="tosubscribe"></a>
+    <a class="hiddenanchor" id="tologin"></a>
+  <div class="registration animate">
+        <h1>Sign up</h1>
+    <form name = "registration" id="registrationForm" action="" autocomplete="on">
+        <div class="email">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" required="required" placeholder="chat@gmail.com" autofocus><span class="red">*</span>
+        </div>
+        <div class="nick">
+        <label for="nickname">Username</label>
+        <input type="text" id="nickname"  placeholder=""><span class="red">*</span>
+        </div>
+        <div class="pass">
+        <label for="password">Password</label>
+        <input type="password" id="password"  placeholder=""><span class="red">*</span>
+        </div>
+        <input type = 'submit' id = 'submitReg' value = 'OK'>
+    </form>
+    <p class="change_link">
+        Already a member ?
+        <a href="#tologin" class="to_subscribe"> Go and log in </a>
+    </p>
+  </div>
+   <div class = "login animate">
+       <h1>Log in</h1>
+    <form name = "login" id="loginForm" action="" autocomplete="on">
+        <div class="nick">
+            <label for="nickLog">Login</label>
+            <input type="text" id="nickLog"  placeholder="" autofocus><span class="red">*</span>
+        </div>
+        <div class="pass">
+            <label for="passwordLog">Password</label>
+            <input type="password" id="passwordLog"  placeholder=""><span class="red">*</span>
+        </div>
+
+            <input type="submit" id = 'loginOk' value="Login" />
+    </form>
+       <p class="change_link">
+           Not a member yet ?
+           <a href="#tosubscribe" class="to_subscribe">Join us</a>
+       </p>
+   </div>
+</div>
+
+
+<div id="container">
+    <ul id = messages> </ul>
+    <label id = 'nameChat' >CHAT</label>
+    <input id = 'logout' class = 'top' type = 'button' value = 'logout'>
+    <form action = ''>
+        <input type = 'text' id = 'text' placeholder = 'type your message...'>
+        <label for ='submit'><span class="icon"><i class="fa fa-paper-plane"></i></span></label>
+        <input type = 'submit' id = 'submit' value = ''>
+    </form>
+</div>
+
+</body>
+
+</html>

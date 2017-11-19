@@ -1,0 +1,42 @@
+[2017-11-16T15:35:42.587] [ERROR] cheese - { MongoError: E11000 duplicate key error collection: mydb.users index: login_1 dup key: { : "nadin" }
+    at Function.MongoError.create (C:\Users\Gorenok\CHAT\node_modules\mongodb-core\lib\error.js:31:11)
+    at toError (C:\Users\Gorenok\CHAT\node_modules\mongodb\lib\utils.js:139:22)
+    at C:\Users\Gorenok\CHAT\node_modules\mongodb\lib\collection.js:668:23
+    at handleCallback (C:\Users\Gorenok\CHAT\node_modules\mongodb\lib\utils.js:120:56)
+    at resultHandler (C:\Users\Gorenok\CHAT\node_modules\mongodb\lib\bulk\ordered.js:421:14)
+    at C:\Users\Gorenok\CHAT\node_modules\mongodb-core\lib\connection\pool.js:469:18
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+  name: 'MongoError',
+  message: 'E11000 duplicate key error collection: mydb.users index: login_1 dup key: { : "nadin" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'E11000 duplicate key error collection: mydb.users index: login_1 dup key: { : "nadin" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+[2017-11-16T18:29:46.855] [ERROR] cheese - user not in database nadinTypeError: Cannot read property 'login' of null
+[2017-11-16T18:33:14.298] [ERROR] cheese - user not in database nadinCannot read property 'login' of null
+[2017-11-16T19:12:28.741] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0db8ecab39fe19ec806e17') }
+[2017-11-16T19:18:39.338] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dba5fbd85541f3086b6d4') }
+[2017-11-16T19:21:09.866] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dbaf54c974013ec4369e1') }
+[2017-11-16T19:23:01.366] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dbb653051341c8c343f38') }
+[2017-11-16T19:25:43.968] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dbc076c81c2127892c662') }
+[2017-11-16T19:46:27.217] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dc0e315c7b6062c886114') }
+[2017-11-16T19:47:35.348] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dc127fb528b1d10c43621') }
+[2017-11-16T20:13:55.859] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dc75368c5f20830a975fb') }
+[2017-11-16T20:16:48.052] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dc7ff70ab100808d1fad1') }
+[2017-11-16T20:19:33.048] [ERROR] cheese - E11000 duplicate key error collection: mydb.messages index: _id_ dup key: { : ObjectId('5a0dc8a47cba8c0914fd88f8') }
+[2017-11-16T23:18:13.435] [ERROR] cheese - user not in database nadinCannot read property 'login' of null
+[2017-11-17T11:22:24.042] [ERROR] cheese - user not in database tCannot read property 'login' of null
+[2017-11-19T02:07:55.447] [ERROR] cheese - user not in database dimaCannot read property 'login' of null
+[2017-11-19T02:08:17.828] [ERROR] cheese - user not in database dimaCannot read property 'login' of null
+[2017-11-19T02:14:26.460] [ERROR] cheese - user not in database dimaCannot read property 'login' of null
+[2017-11-19T02:14:52.353] [ERROR] cheese - user not in database dimaCannot read property 'login' of null
+[2017-11-19T02:42:13.989] [ERROR] cheese - user not in database dima
+[2017-11-19T02:56:58.655] [ERROR] cheese - user not in database nadin
+[2017-11-19T02:57:08.939] [ERROR] cheese - user not in database nadin
+[2017-11-19T14:55:12.105] [ERROR] cheese - user not in database nadin
+[2017-11-19T19:07:10.218] [ERROR] cheese - user not in database dima
+[2017-11-19T19:13:48.162] [ERROR] cheese - user not in database dima

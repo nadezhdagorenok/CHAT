@@ -1,0 +1,628 @@
+@media all and (min-width:1200px){
+    #container, #box{
+        width: auto;
+    }
+}
+@media all and (max-width:524px){
+    #container {
+        border-top-width: 10vw!important;
+        border-bottom-width: 14vw!important;
+    }
+    body #container .name {
+        right: 26vw!important;
+        top: -7.5vw!important;
+    }
+    body #container #logout {
+        top: -7.5vw!important;
+        right: 7vw!important;
+        width: 19vw!important;
+    }
+    body #container #nameChat {
+        font-size: 2.3em!important;
+        top: -11vw!important;
+    }
+    body #container #text {
+        bottom: -9vw!important;
+    }
+    body #container #messages {
+        height :76vh!important;
+    }
+
+    body #box .registration, body #box .login {
+        height: 90vw !important;
+        width: 90vw !important;
+        left: 5vw !important;
+    }
+    body #box h1 {
+        left: 35vw !important;
+    }
+    body #box #loginForm .nick {
+        top: 20vw!important;
+    }
+    body #box #loginForm .pass {
+        top: 35vw!important;
+    }
+    #box #nickname, #box #email, #box #password, #box #nickLog, #box #passwordLog {
+        width: 50vw !important;
+    }
+    #box .nick, #box .pass, #box .email {
+        width: 75vw!important;
+    }
+    body #box #nickname, body #box #email, body #box #password, body #box #nickLog, body #box #passwordLog {
+        height: 6vw!important;
+    }
+    body #box #loginOk {
+        top: 55vw!important;
+    }
+
+    body #box #submitReg, body #box #loginOk {
+        width: 14vw!important;
+        height: 8vw!important;
+        font-size: 1.4em!important;
+    }
+    body #box .change_link {
+        top: 75vw!important;
+    }
+    body #box .pass {
+        top: 40vw!important;
+    }
+    body #box .email {
+        top: 18vw!important;
+    }
+    body #box .nick {
+        top: 29vw!important;
+    }
+    body #box #submitReg {
+        top: 55vw!important;
+    }
+    #box .error {
+        left: 75vw!important;
+        width: 10vw!important;
+        font-size: .7em!important;
+    }
+
+}
+
+@media screen and (max-width: 746px) {
+    #container {
+        width : 90vw!important;
+        height : 90vh!important;
+        left: 5vw!important;
+        border-top-width: 8vw!important;
+        border-bottom-width: 12vw!important;
+    }
+    body #container #text {
+        width : 70vw;
+    }
+    body #container #logout {
+        top : -7vw;
+        right : 4vw;
+
+    }
+    body #container .name {
+        right: 16vw;
+        font-size : 1.7em;
+        top: -6vw;
+    }
+    body #container #nameChat {
+        font-size : 3em;
+        top: -8vw;
+    }
+    #text .icon {
+        bottom : -6vw!important;
+        right : 5.5vw!important;
+    }
+    .icon .fa {
+        font-size: 1.2em!important;
+    }
+    #container #messages {
+        width : 78vw!important;
+        height :70vh!important;
+        font-size : 1.4em;
+        margin: 1vw 2.5vw 1vw 2.5vw;
+    }
+    body #box .registration, body #box .login {
+        height: 85vh;
+        top: 5vw;
+    }
+    body #box h1 {
+        top: 2vw;
+        left: 23vw;
+        font-size: 2em;
+    }
+    body #box .email{
+        top: 12vw;
+    }
+    body #box .nick{
+        top: 19vw;
+    }
+    body #box .pass{
+        top: 26vw;
+    }
+    body #box #nickname, body #box #email, body #box #password, body #box #nickLog, body #box #passwordLog {
+        height: 4vw;
+    }
+    body #box label[for='nickname'], body #box label[for='password'], body #box label[for='email'], body #box label[for='nickLog'], body #box label[for='passwordLog'] {
+        font-size: 1.5em;
+    }
+    body #box #submitReg {
+        top: 35vw;
+    }
+    body #box #submitReg, body #box #loginOk {
+        width: 7vw;
+        height: 4vw;
+        font-size: 1.3em;
+    }
+    body #box .change_link {
+        top: 40vw;
+        font-size: 1.2em;
+    }
+    body #box #loginForm .pass {
+        top: 25vw;
+    }
+    body #box #loginForm .nick {
+        top: 12vw;
+    }
+    body #box #loginOk {
+        top: 35vw;
+    }
+    body #box #nickname,body #box #email,body #box #password,body #box #nickLog,body #box #passwordLog {
+        width: 28vw;
+        font-size:.6em;
+    }
+
+}
+@media screen and (max-width: 1199px) {
+    #container #nameChat {
+        font-size : 2.5em;
+        top: -5vw;
+    }
+    body  #container {
+        width : 70vw;
+        height : 80vh;
+        left: 15vw;
+        border-top-width: 5vw;
+        border-bottom-width: 12vw;
+    }
+    #container #messages {
+        width: 65vw;
+        height: 55vh;
+    }
+    #container .name {
+        top: -4vw;
+        right: 13vw;
+    }
+
+    .icon {
+        bottom : -6vw!important;
+        right : 5.5vw!important;
+    }
+    .icon .fa {
+        font-size: 1.6em;
+    }
+    #container #text {
+        width : 50vw;
+        height : 7vw;
+        border-radius : 5px;
+        font-size : 1.4em;
+        left: 5vw;
+        bottom: -10vw;
+    }
+    #container #submit {
+        width : 9vw;
+        height : 9vw;
+        bottom: -10vw;
+        right: 2vw;
+    }
+    #container #logout {
+        top : -5vw;
+        right : 2vw;
+        width : 10vw;
+        font-size : 1.4em;
+        height: 6vw;
+    }
+    #box .registration, #box .login {
+        left: 20vw;
+        width: 60vw;
+        height: 60vw;
+    }
+    #box h1 {
+        top: 4vw;
+        left: 23vw;
+        font-size: 3em;
+    }
+    #box #loginForm .nick {
+        top: 15vw;
+    }
+    #box #loginForm .pass {
+        top : 30vw;
+    }
+    #box .nick,#box .pass,#box .email{
+        width : 48vw;
+    }
+    #box .email{
+        top: 15vw;
+    }
+    #box .nick{
+        top: 25vw;
+    }
+    #box .pass{
+        top: 35vw;
+    }
+
+    #box label[for='nickname'], #box label[for='password'], #box label[for='email'], #box label[for='nickLog'], #box label[for='passwordLog'] {
+        font-size: 2em;
+    }
+    #box #nickname,#box #email,#box #password,#box #nickLog,#box #passwordLog {
+        width: 30vw;
+        height: 5vw;
+        font-size: 1.5em;
+    }
+    #box #loginOk {
+        top: 45vw;
+    }
+    #box #submitReg, #box #loginOk {
+        width: 8vw;
+        height: 5vw;
+        font-size: 2em;
+    }
+    #box #submitReg {
+        top: 45vw;
+    }
+    #box .change_link {
+        top: 52vw;
+        font-size: 1.5em;
+    }
+    #box .error {
+        font-size: .9em;
+        left: 48vw;
+        width: 7vw;
+    }
+
+}
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight : 400;
+}
+* {
+    box-sizing: border-box;
+    margin : 0;
+    padding : 0;
+}
+#container {
+    display: none;
+    width : 45vw;
+    height : 42vw;
+    border : 1.5vw solid #2196F3;
+    position : relative;
+    top: 5vh;
+    left: 20vw;
+    border-top-width: 3vw;
+    border-bottom-width: 7vw;
+    border-top-right-radius: 15%;
+    border-bottom-left-radius: 15%;
+    box-shadow:2px 2px 15px #1976D2 inset,-2px -2px 15px #000 inset;
+    background-color: rgba(6,6,6,0.05)
+
+}
+#text {
+    position : absolute;
+    bottom : -5.2vw;
+    left :1vw;
+    width : 37vw;
+    height : 3vw;
+    border-radius : 5px;
+    font-size : 1em;
+
+}
+#submit {
+    position : absolute;
+    bottom : -5.8vw;
+    right : -.8vw;
+    width : 4vw;
+    height : 4vw;
+    border-radius : 100%;
+    background-color: #FF4081;
+    transform: translateZ(0);
+    transition: all 0.5s ease;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    cursor : pointer;
+}
+.icon {
+    position: absolute;
+    z-index: 100;
+    bottom : -4.3vw;
+    right : .7vw;
+    color: #FFF;
+    cursor : pointer;
+}
+#logout {
+    top : -2.3vw;
+    right : 2vw;
+    width : 4vw;
+    border-left : 1px solid #1976D2;
+}
+.name {
+    position:absolute;
+    top: -2.7vw;
+    right: 7vw;
+    font-size : 1.5em;
+    color: gray;
+}
+.top {
+    position : absolute;
+    border : hidden;
+    background-color: transparent;
+    color : #FFF;
+    cursor : pointer;
+    font-size : 0.9em;
+    height : 1.5vw;
+}
+#nameChat {
+    position : absolute;
+    top : -3vw;
+    left : 1vw;
+    font-weight : 600;
+    font-size : 2.5em;
+    color: #FF4081;
+    font-family: 'Montez', cursive;
+}
+.fa {
+    display: inline-block;
+    font-size: 1.2em;
+}
+#messages {
+    position : absolute;
+    width : 40vw;
+    height :30vw;
+    left : .1vw;
+    top : .5vw ;
+    list-style-type: none;
+    padding: 0;
+    margin : 1vw .5vw .5vw .5vw;
+    overflow-y: auto;          /*скроллинг по вертикали*/
+    font-size : 1.2em;
+    font-style: italic;
+}
+#messages::-webkit-scrollbar { width: 0 !important }   /*для скрытия полосы прокрутки*/
+#messages { -ms-overflow-style: none; }
+#messages { overflow: -moz-scrollbars-none; }
+
+
+#messages li {
+    padding: 5px 5px;
+    word-wrap : break-word!important;
+
+}
+/*#messages li:nth-child(add) {*/
+    /*!*background-color: lawngreen;*!*/
+/*color: red;*/
+
+/*}*/
+/*#messages li:nth-child(even) {*/
+    /*color: darkmagenta;*/
+/*}*/
+
+
+.registration, .login{
+    position : absolute;
+    top : 15vh;
+    left : 30vw;
+    width : 30vw;
+    height : 30vw;
+    background-color: #2196F3;
+    border-radius: 2%;
+    box-shadow:
+            0 2px 5px rgba(105, 108, 109,  0.7),
+            0 0 8px 5px rgba(208, 223, 226, 0.4) inset;
+}
+.login{
+    z-index: 22;
+}
+.registration{
+    z-index: 21;
+    opacity: 0;
+}
+#tosubscribe:target ~ .registration,
+#tologin:target ~ .login{
+    z-index: 23;
+    animation-name: fadeInLeft;
+    animation-delay: .1s;
+}
+.animate{
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
+}
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+#tosubscribe:target ~ .login,
+#tologin:target ~ .registration{
+    animation-name: fadeOutLeftBig;
+}
+
+@keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+h1{
+    position: absolute;
+    top:2vw;
+    left: 11.5vw;
+    color: #FF4081;
+}
+.nick, .pass, .email{
+    position : absolute;
+    width : 20vw;
+    left:5vw;
+}
+.email{
+    top: 8vw;
+}
+.nick{
+    top: 13vw;
+}
+.pass{
+    top: 18vw;
+}
+#loginForm .nick {
+    top : 9vw;
+}
+#loginForm .pass {
+    top : 15vw;
+}
+label[for='nickname'], label[for='password'], label[for='email'], label[for='nickLog'], label[for='passwordLog'] {
+    float: left;
+    margin-top: .4vw;
+}
+#nickname, #email, #password, #nickLog, #passwordLog{
+    float:right;
+    width: 14vw;
+    height: 2vw;
+    font-size: 1.1em;
+    border: 1px solid rgb(178, 178, 178);
+    box-sizing : content-box;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px 0 rgba(168, 168, 168, 0.6) inset;
+    transition: all 0.2s linear;
+}
+#registrationForm input:active,
+#registrationForm input:focus,
+#loginForm input:active,
+#loginForm input:focus {
+    border: 1px solid rgba(91, 90, 90, 0.7);
+    /*background: #FF4081;
+    color: #fff;*/
+    box-shadow: 0 1px 4px 0 rgba(168, 168, 168, 0.9) inset;
+}
+::-webkit-input-placeholder  {
+    color: rgb(190, 188, 188);
+    font-style: italic;
+}
+
+#submitReg, #loginOk{
+    position: absolute;
+    top: 22vw;
+    right: 5vw;
+    width: 4vw;
+    height: 2vw;
+    cursor: pointer;
+    background-color: #FF4081;
+    font-size: 1.1em;
+    border: 1px solid rgb(28, 108, 122);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    box-shadow:
+            0 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
+            0 0 0 3px rgb(254, 254, 254),
+            0 5px 3px 3px rgb(210, 210, 210);
+    transition: all 0.2s linear;
+}
+#submitReg:hover{
+    background: rgb(74, 179, 198);
+}
+#submitReg:active,
+#submitReg:focus{
+    background: rgb(40, 137, 154);
+    top: 22.2vw;
+    border: 1px solid rgb(12, 76, 87);
+    box-shadow: 0 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+#loginOk{
+    top : 21vw;
+}
+.red{
+    color: red;
+    position:absolute;
+}
+.change_link{
+    position: absolute;
+    top:26vw;
+    left: 5vw;
+    color: rgb(127, 124, 124);
+}
+p.change_link a {
+    display: inline-block;
+    font-weight: bold;
+    color: rgb(29, 162, 193);
+    background: rgb(247, 248, 241);
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid rgb(203, 213, 214);
+    transition: all 0.4s  linear;
+}
+p.change_link a:hover {
+    color: rgb(57, 191, 215);
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(74, 179, 198);
+}
+p.change_link a:active{
+    position : relative;
+    top: .3vw;
+}
+a.hiddenanchor{
+    display: none;
+}
+.error {
+    background-color: red;
+    color: white;
+    font-size: .6em;
+    font-weight: bold;
+    padding: 4px;
+    position: absolute;
+    left: 20vw;
+    width:5vw;
+    border-radius:1em;
+
+}
+li>a{
+    text-align:center;
+    margin-top: -2vw;
+}
+.dateMessages{
+    text-align:center;
+    font-size: .6em;
+    color: gray;
+}
+.time{
+
+   text-align:right!important;
+    margin-top: -1em;
+    color: gray;
+    font-size: .6em;
+
+}
+.bot{
+    background-color: aquamarine;
+}
+.news{
+
+    color: darkmagenta;
+
+}
+/*.redBorder {
+    border: 5px solid red;
+}
+.greenBorder {
+    border: 5px solid green;
+}
+*/
