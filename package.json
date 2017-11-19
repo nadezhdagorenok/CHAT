@@ -1,6 +1,7 @@
 {
   "name": "chat",
   "version": "1.0.0",
+  "private": true,
   "description": "NodeJS chat",
   "main": "chat.js",
   "dependencies": {
@@ -17,7 +18,13 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
   },
   "keywords": [
     "nodeJS",
