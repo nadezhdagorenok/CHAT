@@ -28,7 +28,7 @@ app.get('/', function(req, res){
 });
 const mongo = require('mongodb');
 const monk = require('monk');
-const db = require('monk')('mongodb://<dbuser>:<dbpassword>@ds127842.mlab.com:27842/heroku_m6gmwcn0');
+const db = require('monk')('mongodb://nika:6321897@ds127842.mlab.com:27842/heroku_m6gmwcn0');
 //const db = require('monk')('localhost/mydb');
 const users = db.get('users');
 users.createIndex({"login" : 1, "email" : 1}, {"unique" : true})
