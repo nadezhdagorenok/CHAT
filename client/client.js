@@ -1,7 +1,7 @@
 let APP = {};
 window.addEventListener('DOMContentLoaded', ready = () => {
     window.location.hash = 'tologin';
-    const port = 3000; // Указываем порт на котором у на стоит сокет
+    const port = 5000; // Указываем порт на котором у на стоит сокет
     let socket = io.connect('http://localhost:' + port);   //объявляем socket и подключаемся сразу к серверу через порт
     const chat = document.getElementById('container');
     const login = document.getElementsByClassName('login');
