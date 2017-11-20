@@ -1,11 +1,11 @@
-const express = require('express');   // import express
-const app = express();               // start module express
+const express = require('express');                                  // import express
+const app = express();                                              // start module express
 const PORT = 5000;
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {serveClient : true});     //serveClient - whether to serve the client files (true)
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const salt = bcrypt.genSaltSync(12);   // salt - number of hash's raunds - 12
+const salt = bcrypt.genSaltSync(12);                                // salt - number of hash's raunds - 12
 const log4js = require('log4js');
 log4js.configure({                                                // log the cheese logger messages to a file, and the console ones as well.
     appenders: {
@@ -61,13 +61,13 @@ io.on('connection', function(socket) {
 
         })
             .catch(error => {
-                //else {
+
                 logger.error('user not in database ' + logInfo.login + error.message);
                 socket.emit('user not in database', logInfo.login, error.message);
             });
     });
 
-    //});
+
     socket.on('receive messagesHistory', () => {
         messages.find(
             {},
