@@ -1,7 +1,7 @@
 let APP = {};
 window.addEventListener('DOMContentLoaded', ready = () => {
     window.location.hash = 'tologin';
-    const port = 5000; // Указываем порт на котором у на стоит сокет
+    const port = 5000;                                                                                      // Указываем порт на котором у на стоит сокет
     let socket = io.connect('https://cryptic-garden-51889.herokuapp.com' || 'http://localhost:' + port);   //объявляем socket и подключаемся сразу к серверу через порт
     const chat = document.getElementById('container');
     const login = document.getElementsByClassName('login');
@@ -196,9 +196,7 @@ socket.on('userName', function(userName){
 });
 
     socket.on('history', (messages) => {                  // date пока не передаем
-        //console.log(date.toDateString());
-
-        for (let message of messages) {
+       for (let message of messages) {
             $('#messages').append($('<li>').text(message.shortDate).addClass('dateMessages'));
             if (message.type === 'href'){
                 $('#messages').append($('<li>').text(message.username + '  :  ' ).add(("<a href=\"" + message.msg + "\">\"" + message.msg + "\"</a>")).addClass('news'));
@@ -212,17 +210,12 @@ socket.on('userName', function(userName){
                 $('#messages').append($('<li>').text(message.username + '  :  ' + message.msg));// + '         \n' + message.date)); // + '\n' + message.date));
             }
             $('#messages').append($('<li>').text(message.time).addClass('time'));
-            // let liTime = document.createElement('li');
-            // liTime.textContent = message.time;
-            // liTime.classList.add('time');
-            // document.getElementById('messages').appendChild(liTime);
-        }
-       // $('#messages').scrollTop($('#messages').height());
-        //$('#messages').scrollTop = $('#messages').scrollHeight;
+
         $(document).ready(function(){
             let block = document.getElementById('messages');
             $('#messages').scrollTop(block.scrollHeight-block.offsetHeight);
-        });
+         }
+       });
 
     });
 
@@ -246,17 +239,13 @@ $(function () {
         socket.on('chat message', function(msg,name, type, time,date, mesUser) {
 
             $('#messages').append($('<li>').text(date).addClass('dateMessages'));
-            // let dateMessage = document.createElement('li');
-            // dateMessage.textContent = date;
-            // dateMessage.classList.add('dateMessages');
-            // document.getElementById('messages').appendChild(dateMessage);
 
             let liTime = document.createElement('li');
             liTime.textContent = time;
             liTime.classList.add('time');
 
             if (type == "href") {
-                $('#messages').append($('<li>').text(name + '  :  ' + mesUser + '! Catch link ').add(("<a href=\"" + msg + "\">\"" + msg + "\"</a>")).addClass('news'));
+                $('#messages').append($('<li>').text(name + '  :  ' + mesUser + '! Catch link ').add(("<a href=\"" + msg + "\" target="_blank">\"" + msg + "\"</a>")).addClass('news'));
                 document.getElementById('messages').appendChild(liTime);
             }
             else if(type === 'money'|| type === 'physic'){
@@ -269,30 +258,10 @@ $(function () {
                 document.getElementById('messages').appendChild(liTime);
             }
 
-            // else if (type == 'money'){
-            //     let uri = 'http://www.nbrb.by/API/';
-            //     $.getJSON(uri + 'ExRates/Rates/' + msg, {'Periodicity': 0 })
-            //         .done(function (data) {
-            //             if (msg === '298'){
-            //                 $('<li>', { text: name + ' : ' + '100 ' + data['Cur_Abbreviation'] + ' = ' + data['Cur_OfficialRate'] + ' BYN '}).appendTo($('#messages'));
-            //             }
-            //             else {
-            //                 $('<li>', {text: name + ' : ' + '1 ' + data['Cur_Abbreviation'] + ' = ' + data['Cur_OfficialRate'] + ' BYN '}).appendTo($('#messages'));
-            //
-            //             }
-            //
-            //                 alert(data['Cur_OfficialRate']);
-            //             });
-            // }
             else {
                 $('#messages').append($('<li>').text(name + '  :  ' + msg));//+'\n'+ messageDate));    //  поле для текста добавили сообщение вида ник : сообщение
                 document.getElementById('messages').appendChild(liTime);
             }
-           //$('#messages').scrollTop($('#messages').height());
-            //$('#messages').scrollTop = $('#messages').scrollHeight;
-            // var offset = document.getElementById('messages').offset();
-            // var offsetTop = offset.top;
-            // var totalScroll = offsetTop-40;
             $(document).ready(function(){
                 let block = document.getElementById('messages');
                 $('#messages').scrollTop(block.scrollHeight-block.offsetHeight);
@@ -300,30 +269,8 @@ $(function () {
 
         });
 
-
-    // socket.on('botMessage', function(msg,name, type, time,date) {
-    //
-    //     let dateMessage = document.createElement('li');
-    //     dateMessage.textContent = date;
-    //     dateMessage.classList.add('dateMessages');
-    //     document.getElementById('messages').appendChild(dateMessage);
-    //     let liTime = document.createElement('li');
-    //     liTime.textContent = time;
-    //     liTime.classList.add('time');
-    //     if (type == "href") {
-    //         $('<li>', {text: name + ' : '}).add(("<a href=\"" + msg + "\">\"" + msg + "\"</a>")).appendTo($('#messages'));
-    //
-    //         document.getElementById('messages').appendChild(liTime);
-    //     }
-    //     else {
-    //         $('#messages').append($('<li>').text(name + '  :  ' + msg));//+'\n'+ messageDate));    //  поле для текста добавили сообщение вида ник : сообщение
-    //         document.getElementById('messages').appendChild(liTime);
-    //     }
-    //     $('#messages').scrollTop($('#messages').height()).focus();
-    // });
-
     });
-        });
+});
 
 
 
