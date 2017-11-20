@@ -18,6 +18,7 @@ window.addEventListener('DOMContentLoaded', ready = () => {
     chat.appendChild(name);
 
     function logoutChat(){
+        document.getElementById('messages').innerText = '';
         chat.style.display = 'none';
         name.textContent = "";
         formsContainer.style.display = 'block';
