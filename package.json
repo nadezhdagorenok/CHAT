@@ -7,7 +7,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.1",
-    "express": "^4.16.2",
+    "bower": "^1.8.2",
+    "express": "4.16.2",
+    "grunt-cli": "^1.2.0",
+    "gulp": "^3.9.1",
     "http": "0.0.0",
     "log4js": "^2.3.12",
     "mongodb": "^2.2.33",
@@ -17,7 +20,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": "8.4.0",
