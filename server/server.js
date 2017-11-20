@@ -329,7 +329,7 @@ io.on('connection', function(socket) {
 
 
 
-server.listen(PORT, ()=>{                         // чтение на 3000 порту
+server.listen(process.env.PORT || 5000, ()=>{                         // чтение на 5000 порту
     anotherLogger.info('server started on port: ', PORT);
 });
 
