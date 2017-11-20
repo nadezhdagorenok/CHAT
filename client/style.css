@@ -84,7 +84,7 @@
         width: 10vw!important;
         font-size: .7em!important;
     }
-    body #text .icon{
+    #container #text .icon{
         bottom: -8vw!important;
         right: 4vw!important;
     }
@@ -116,7 +116,7 @@
         font-size : 3em;
         top: -8vw;
     }
-    body #text .icon {
+    #container #text .icon {
         bottom: -7vw;
         right: 5.5vw;
     }
@@ -402,7 +402,7 @@ body {
     top : .5vw ;
     list-style-type: none;
     padding: 0;
-    margin : 2vw 1.5vw 2vw 1.5vw;
+    margin : 1vw 1.5vw 1vw 1.5vw;
     overflow-y: auto;          /*скроллинг по вертикали*/
     font-size : 1.5em;
     font-style: italic;
