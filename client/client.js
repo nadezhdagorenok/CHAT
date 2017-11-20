@@ -18,8 +18,8 @@ window.addEventListener('DOMContentLoaded', ready = () => {
     chat.appendChild(name);
 
     function logoutChat(){
-        document.getElementById('messages').innerText = '';
         chat.style.display = 'none';
+        document.getElementById('messages').innerHTML = '';
         name.textContent = "";
         formsContainer.style.display = 'block';
         document.forms['login'].reset();
