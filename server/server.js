@@ -1,6 +1,6 @@
 const express = require('express');   // импортируем express
 const app = express();     // запускаем модуль express
-const PORT = 3000;
+const PORT = 5000;
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {serveClient : true});     //serveClient - whether to serve the client files (true)
 const path = require('path');
