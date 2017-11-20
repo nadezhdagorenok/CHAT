@@ -1,12 +1,12 @@
-const express = require('express');   // импортируем express
-const app = express();     // запускаем модуль express
+const express = require('express');   // import express
+const app = express();               // start module express
 const PORT = 5000;
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {serveClient : true});     //serveClient - whether to serve the client files (true)
 const path = require('path');
-const bcrypt = require('bcryptjs');      // this.password = bcrypt.hashSync(this.password, 12);
+const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(12);   // salt - number of hash's raunds - 12
-const log4js = require('log4js');  //  Подключаем логгер
+const log4js = require('log4js');
 log4js.configure({                                                // log the cheese logger messages to a file, and the console ones as well.
     appenders: {
         cheeseLogs: { type: 'file', filename: 'cheese.log' },
@@ -24,28 +24,19 @@ const anotherLogger = log4js.getLogger('another');
 const rp = require('request-promise');
 app.use(express.static(path.join(__dirname,'..','client')));
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '..','client', 'index.html'));        // не нужен res.render('index.html', {date: new Date()});  для nunjucks
+    res.sendFile(path.join(__dirname, '..','client', 'index.html'));
 });
 const mongo = require('mongodb');
 const monk = require('monk');
 const db = require('monk')('mongodb://nika:6321897@ds127842.mlab.com:27842/heroku_m6gmwcn0');
-//const db = require('monk')('localhost/mydb');
+//const db = require('monk')('localhost/mydb');       // for localhost
 const users = db.get('users');
 users.createIndex({"login" : 1, "email" : 1}, {"unique" : true})
 const messages = db.get('messages');
 
-/*
-socket.emit('event') — отправляет на сервер\клиент
-socket.on — прослушивает события на клиенте
-io.on — прослушивает события на сервере
-socket.broadcast.emit('newUser', name); — отправка события 'newUser' всем кроме текущего сокета, с переменной name (текущего сокета).
-socket.emit('userName', name); — отправляет событие 'userName' только текущему сокету c переменной name.
-*/
-
 io.on('connection', function(socket) {
     let name = 'U' + (socket.id).toString().substr(1, 4);
     anotherLogger.info('A user  ' + name + '  connected to chat! ', socket.id);
-    // io.emit('chat message','User ' + socket.id + ' connected', 'System : ');
     socket.on('search user', function (logInfo) {
 
         anotherLogger.debug(logInfo);
@@ -57,17 +48,8 @@ io.on('connection', function(socket) {
             let hash =  user.password;
             bcrypt.compare(logInfo.password,  hash).then( (res) => {
                 if(res){
-
-
-
-
-            //if (user) {
-
-            anotherLogger.info('user is in database', user.login);  // ???нужно заменить на logInfo.login???
-            //io.emit('user in database', logInfo.login);
-
+            anotherLogger.info('user is in database', user.login);
             socket.broadcast.emit('newUser', user.login);  // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
-
             socket.emit('userName', user.login);
             anotherLogger.debug('userName   ' + user.login + '  go to client');
          }
@@ -92,14 +74,10 @@ io.on('connection', function(socket) {
             {limit: 50},                           //sort: {username : -1, msg : -1},
             function (err, listOfMessages) {
                 if (!err) {
-                    //let date = (new Date()).toDateString();
-                    socket.emit('history', listOfMessages); //,date);
-                    //anotherLogger.debug(listOfMessages);
+                    socket.emit('history', listOfMessages);
                 }
             });
     });
-    //socket.broadcast.emit('newUser', name);  // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
-    //socket.emit('userName', name);          // Отправляем текущему клиенту событие 'userName' с его ником (name) (Отправляем клиенту его юзернейм)
 
     socket.on('chat message', function (msg, name, timeMessage, dateMessage) {        //обработчик на событие chat message
         anotherLogger.info('User: ' + name + ' | Message: ' + msg + '   ' + timeMessage + '  ' + dateMessage);
@@ -116,17 +94,6 @@ io.on('connection', function(socket) {
         messages.insert(message).then((mes) => {
             anotherLogger.info('In DB  ' + mes.username + ' : ' + mes.msg + '   ' + mes.time + '  ' + mes.shortDate);
             io.emit('chat message', mes.msg, mes.username, mes.type, mes.time, mes.shortDate);
-
-            /*let dateNow = new Date();
-              let date = dateNow.getDate();
-             getOptionDate(date);
-             let month = dateNow.getMonth();
-             let hours = dateNow.getHours();
-             getOptionDate(hours);
-             let minutes = dateNow.getMinutes();
-             getOptionDate(minutes);
-             let messageDate = date + ' : ' + month + ' ' + hours + ':' + minutes;
-              let timeMessage = dateNow.toLocaleTimeString();*/
             let msgLow = mes.msg.toLowerCase();
             anotherLogger.debug(msgLow);
             let msgBot={};
@@ -134,7 +101,7 @@ io.on('connection', function(socket) {
             msgBot.time = (new Date()).toLocaleTimeString();
             msgBot.shortDate = (new Date()).toDateString();
             let arr = msgLow.split(' ');
-            let number; // значение - цифра валюты
+            let number;            // значение - цифра валюты
             if (msgLow in collectionNews) {
                 msgBot.msg = collectionNews[msgLow];
                 msgBot.username = 'journalist';
@@ -149,8 +116,6 @@ io.on('connection', function(socket) {
                     .catch(error => {
                         logger.error(error.message);
                     });
-                // io.emit('chat message', collectionNews[msgLow], 'journalist', collectionNews["type"], mes.time);
-                // anotherLogger.info('journalist: ' + mes.username + ' | Message: ' + collectionNews[msgLow]+ '|||  ' + collectionNews["type"], mes.time);
             }
             else if (msgLow in collectionProperty){
                 msgBot.msg = collectionProperty[msgLow];
@@ -166,10 +131,7 @@ io.on('connection', function(socket) {
                     .catch(error => {
                         logger.error(error.message);
                     });
-                // io.emit('chat message', collectionNews[msgLow], 'journalist', collectionNews["type"], mes.time);
-                // anotherLogger.info('journalist: ' + mes.username + ' | Message: ' + collectionNews[msgLow]+ '|||  ' + collectionNews["type"], mes.time);
             }
-
             else {
                 for (let i = 0; i < arr.length; i++) {
                     if (arr[i] in collectionHello) {
@@ -187,11 +149,7 @@ io.on('connection', function(socket) {
                             .catch(error => {
                                 logger.error(error.message);
                             });
-                        //io.emit('chat message', mes.msg, mes.username, mes.type, mes.time);//, timeMessage);
-                        // io.emit('chat message', collectionHello[arr[i]], 'bot', collectionHello['type'], mes.time);//, timeMessage);
-                        // anotherLogger.info('bot: ' + mes.username + ' | Message: ' + collectionHello[arr[i]], mes.time);
                     }
-
                     else if (arr[i] in collectionPhysics) {
                         msgBot.msg = collectionPhysics[msgLow];
                         msgBot.username = 'physicist';
@@ -206,28 +164,23 @@ io.on('connection', function(socket) {
                             .catch(error => {
                                 logger.error(error.message);
                             });
-                        //io.emit('chat message', mes.msg, mes.username, mes.type, mes.time);//, timeMessage);
-                        // io.emit('chat message', collectionPhysics[arr[i]], 'physicist', collectionPhysics['type'], mes.time);//, mes.time);
-                        // anotherLogger.info('physicist: ' + mes.username + ' | Message: ' + collectionPhysics[arr[i]], mes.time);
+
                     }
 
                     else if (arr[i] in collectionMoney) {
-                        // io.emit('chat message', mes.msg, mes.username, mes.type, mes.time);//, mes.time);
-                        //io.emit('chat message', collectionMoney[arr[i]], 'bank', collectionMoney['type']);//, mes.time);
-
 
                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[i]])
                             .then(data => {
                                 anotherLogger.debug(JSON.parse(data));
                                 let item;
+                                let sum;
                                 if (collectionMoney[arr[i]] === 298) {
-                                    k = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
-                                    item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${k} BYN `;
+                                    sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
+                                    item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
                                 }
                                 else {
-                                    let k;
-                                    k = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
-                                    item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${k} BYN `;
+                                    sum = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
+                                    item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
                                 }
                                 anotherLogger.debug(item);
                                 msgBot.msg = item;
@@ -243,21 +196,14 @@ io.on('connection', function(socket) {
                                     .catch(error => {
                                         logger.error(error.message);
                                     });
-                                //io.emit('chat message', item, 'bank', collectionMoney['type'], mes.time);
                             })
                             .catch(handleError => {
                                 logger.error(handleError);
                             });
-
-                        //anotherLogger.info('bank: ' + mes.username + ' | Message: ' + collectionMoney[arr[i]], mes.time);
                     }
-                    // else io.emit('chat message', mes.msg, mes.username, mes.type, mes.time);
+
                 }
             }
-
-
-            //                      //        отправка всем сокетам сообщения, включая отправи
-
         });
     });
 
@@ -270,47 +216,10 @@ io.on('connection', function(socket) {
         users.insert(logInfo).then((user) => {
             if (user) {
                 anotherLogger.info('user is in database', user.login);
-                //io.emit('user in database', logInfo.login);
-                socket.broadcast.emit('newUser', user.login);  // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
+                socket.broadcast.emit('newUser', user.login);   // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
                 socket.emit('userName', user.login);
                 anotherLogger.debug('userName   ' + user.login + '  go to client');
-                /*socket.on('chat message', function(msg){        //обработчик на событие chat message
-                    console.log('User: ' + user.login + ' | Message: ' + msg);
-                    console.log('====> Sending message to other chaters...');
-
-                    let dateNow = new Date();
-                    let date = dateNow.getDate();
-                    getOptionDate(date);
-                    let month = dateNow.getMonth();
-                    let hours = dateNow.getHours();
-                    getOptionDate(hours);
-                    let minutes = dateNow.getMinutes();
-                    getOptionDate(minutes);
-                    let messageDate = date + ' : ' + month + ' ' + hours + ':' + minutes;
-
-                    if (msg.toLowerCase() in collectionHello){
-                        io.emit('chat message', msg, user.login, messageDate);
-                        io.emit('chat message', collectionHello[msg], 'bot', messageDate);
-                        console.log('bot: ' + name + ' | Message: ' + collectionHello[msg]);
-                    }
-                    else if (msg.toLowerCase() in collectionPhysics){
-                        io.emit('chat message', msg, user.login, messageDate);
-                        io.emit('chat message', collectionPhysics[msg], 'physicist', messageDate);
-                        console.log('physicist: ' + name + ' | Message: ' + collectionPhysics[msg]);
-                    }
-                    else if (msg.toLowerCase() in collectionNews){
-                        io.emit('chat message', msg, user.login, messageDate);
-                        io.emit('chat message', collectionNews[msg], 'journalist', messageDate);
-                        console.log('journalist: ' + name + ' | Message: ' + collectionNews[msg]);
-                    }
-                    else
-                        io.emit('chat message', msg, user.login, messageDate);                 //        отправка всем сокетам сообщения, включая отправителя
-                });*/
             }
-            // else {
-            //     console.log('Error from dataBase');
-            //     socket.emit('user not in database', user);  // Если придет ошибка, т е не запишится в БД, то можно снова вернуть форму регистрации или вывести на стороне клиента сообщение об ошибке
-            // }
 
         }, (err) => {
             logger.error(err);
@@ -327,15 +236,9 @@ io.on('connection', function(socket) {
     });
 });
 
-
-
 server.listen(process.env.PORT || 5000, ()=>{                         // чтение на 5000 порту
     anotherLogger.info('server started on port: ', PORT);
 });
-
-
-
-
 
 
  function getOptionDate(optionDate){
@@ -343,6 +246,7 @@ server.listen(process.env.PORT || 5000, ()=>{                         // чте�
          return optionDate = '0' + optionDate;
      }
  }
+
 const collectionHello = {
      "type" : 'hello',
     "hello" : 'Hi! How are you?',
@@ -389,6 +293,16 @@ const collectionProperty = {
     "house" : 'https://nadezhdagorenok.github.io/index_OldHouse.html',
     "besthome" : 'https://nadezhdagorenok.github.io/about.html'
 };
+
+
+
+/*
+socket.emit('event') — отправляет на сервер\клиент
+socket.on — прослушивает события на клиенте
+io.on — прослушивает события на сервере
+socket.broadcast.emit('newUser', name); — отправка события 'newUser' всем кроме текущего сокета, с переменной name (текущего сокета).
+socket.emit('userName', name); — отправляет событие 'userName' только текущему сокету c переменной name.
+*/
 
 
 
