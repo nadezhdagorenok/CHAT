@@ -84,7 +84,7 @@
 
 }
 
-@media screen and (max-width: 746px) {
+@media all and (max-width: 746px) {
     #container {
         width : 90vw!important;
         height : 90vh!important;
@@ -115,9 +115,9 @@
     .icon .fa {
         font-size: 1.2em!important;
     }
-    #container #messages {
-        width : 78vw!important;
-        height :50vh!important;
+    body #container #messages {
+        width : 78vw;
+        height :50vh;
         font-size : 1.4em;
         margin: 1vw 2.5vw 1vw 2.5vw;
     }
@@ -172,7 +172,7 @@
     }
 
 }
-@media screen and (max-width: 1199px) {
+@media all and (max-width: 1199px) {
     #container #nameChat {
         font-size : 2.5em;
         top: -5vw;
