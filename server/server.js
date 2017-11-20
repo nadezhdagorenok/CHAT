@@ -167,8 +167,88 @@ io.on('connection', function(socket) {
 
                     }
 
-                    else if (arr[i] in collectionMoney) {
+                    else if (arr.length === 4 && arr[1] in collectionMoney && arr[arr.length-1] in collectionMoney) {
+                        rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[1]])
+                            .then(data => {
+                                anotherLogger.debug(JSON.parse(data));
+                                let item;
+                                let sum; let sum2; let d;
+                                if (collectionMoney[arr[1]] === 298) {
+                                    sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
+                                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[arr.length-1]])
+                                        .then(data2 => {
+                                            anotherLogger.debug(JSON.parse(data2));
+                                            sum2 = (sum * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                                            d = JSON.parse(data2)['Cur_Abbreviation'];
 
+                                            item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
+                                            anotherLogger.debug(item);
+                                            msgBot.msg = item;
+                                            msgBot.username = 'bank';
+                                            msgBot.type = collectionMoney["type"];
+                                            anotherLogger.debug(msgBot.username);
+                                            messages.insert(msgBot).then((mesBot) => {
+                                                anotherLogger.debug('bot in database', mesBot);
+                                                io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+                                                anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+                                            });
+                                        });
+                                }
+                                else {
+                                    sum = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
+                                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[arr.length-1]])
+                                        .then(data2 => {
+                                            anotherLogger.debug(JSON.parse(data2));
+                                            sum2 = (sum * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                                            d = JSON.parse(data2)['Cur_Abbreviation'];
+                                            item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
+                                            anotherLogger.debug(item);
+                                            msgBot.msg = item;
+                                            msgBot.username = 'bank';
+                                            msgBot.type = collectionMoney["type"];
+                                            anotherLogger.debug(msgBot.username);
+
+                                            messages.insert(msgBot).then((mesBot) => {
+                                                anotherLogger.debug('bot in database', mesBot);
+                                                io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+                                                anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+                                            });
+                                        });
+                                }
+
+                        // rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[i]])
+                        //     .then(data => {
+                        //         anotherLogger.debug(JSON.parse(data));
+                        //         let item;
+                        //         let sum;
+                        //         if (collectionMoney[arr[i]] === 298) {
+                        //             sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
+                        //             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
+                        //         }
+                        //         else {
+                        //             sum = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
+                        //             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
+                        //         }
+                        //         anotherLogger.debug(item);
+                        //         msgBot.msg = item;
+                        //         msgBot.username = 'bank';
+                        //         msgBot.type = collectionMoney["type"];
+                        //         anotherLogger.debug(msgBot.username);
+                        //
+                        //         messages.insert(msgBot).then((mesBot) => {
+                        //             anotherLogger.debug('bot in database', mesBot);
+                        //             io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+                        //             anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+                        //         })
+                        //             .catch(error => {
+                        //                 logger.error(error.message);
+                        //             });
+                            })
+                            .catch(handleError => {
+                                logger.error(handleError);
+                            });
+                    }
+                    else if (arr.length === 2 && arr[i] in collectionMoney){
                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[i]])
                             .then(data => {
                                 anotherLogger.debug(JSON.parse(data));
@@ -196,11 +276,17 @@ io.on('connection', function(socket) {
                                     .catch(error => {
                                         logger.error(error.message);
                                     });
-                            })
-                            .catch(handleError => {
-                                logger.error(handleError);
-                            });
+                    })
+            .catch(handleError => {
+                logger.error(handleError);
+            });
+    
+
+
+
+
                     }
+
 
                 }
             }
@@ -216,7 +302,7 @@ io.on('connection', function(socket) {
         users.insert(logInfo).then((user) => {
             if (user) {
                 anotherLogger.info('user is in database', user.login);
-                socket.broadcast.emit('newUser', user.login);   // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
+                socket.broadcast.emit('newUser', user.login);          // Отсылает событие 'newUser' всем подключенным, кроме текущего. На клиенте навешаем обработчик на 'newUser' (Отправляет клиентам событие о подключении нового юзера)
                 socket.emit('userName', user.login);
                 anotherLogger.debug('userName   ' + user.login + '  go to client');
             }
