@@ -10,22 +10,23 @@
     }
     body #container .name {
         right: 26vw!important;
-        top: -7.5vw!important;
+        top: -8vw!important;
     }
     body #container #logout {
         top: -7.5vw!important;
-        right: 7vw!important;
+        right: 6vw!important;
         width: 19vw!important;
+        font-size: 1.2em!important;
     }
     body #container #nameChat {
-        font-size: 2.3em!important;
-        top: -11vw!important;
+        font-size: 2.2em!important;
+        top: -9vw!important;
     }
     body #container #text {
         bottom: -9vw!important;
     }
     body #container #messages {
-        height :76vh!important;
+        height :77vh!important;
     }
 
     body #box .registration, body #box .login {
@@ -109,15 +110,14 @@
         top: -8vw;
     }
     #text .icon {
-        bottom : -6vw!important;
-        right : 5.5vw!important;
+        bottom : -7vw!important;
     }
     .icon .fa {
         font-size: 1.2em!important;
     }
     #container #messages {
         width : 78vw!important;
-        height :70vh!important;
+        height :50vh!important;
         font-size : 1.4em;
         margin: 1vw 2.5vw 1vw 2.5vw;
     }
@@ -193,8 +193,8 @@
         right: 13vw;
     }
 
-    .icon {
-        bottom : -6vw!important;
+    #text .icon {
+        bottom : -6vw;
         right : 5.5vw!important;
     }
     .icon .fa {
