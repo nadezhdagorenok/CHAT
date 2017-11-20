@@ -214,7 +214,7 @@ socket.on('userName', function(userName){
         $(document).ready(function(){
             let block = document.getElementById('messages');
             $('#messages').scrollTop(block.scrollHeight-block.offsetHeight);
-         }
+         });
        });
 
     });
