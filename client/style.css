@@ -13,10 +13,11 @@
         top: -8vw!important;
     }
     body #container #logout {
-        top: -7.5vw!important;
+        top: -7vw!important;
         right: 6vw!important;
         width: 19vw!important;
         font-size: 1.2em!important;
+        height: 6vw!important;
     }
     body #container #nameChat {
         font-size: 2.2em!important;
@@ -44,7 +45,7 @@
         top: 35vw!important;
     }
     #box #nickname, #box #email, #box #password, #box #nickLog, #box #passwordLog {
-        width: 50vw !important;
+        width: 46vw !important;
     }
     #box .nick, #box .pass, #box .email {
         width: 75vw!important;
@@ -54,6 +55,7 @@
     }
     body #box #loginOk {
         top: 55vw!important;
+        right: 10vw!important;
     }
 
     body #box #submitReg, body #box #loginOk {
@@ -74,12 +76,17 @@
         top: 29vw!important;
     }
     body #box #submitReg {
-        top: 55vw!important;
+        top: 56vw!important;
+        right: 11vw;
     }
     #box .error {
         left: 75vw!important;
         width: 10vw!important;
         font-size: .7em!important;
+    }
+    body #text .icon{
+        bottom: -8vw!important;
+        right: 4vw!important;
     }
 
 }
@@ -109,8 +116,9 @@
         font-size : 3em;
         top: -8vw;
     }
-    #text .icon {
-        bottom : -7vw!important;
+    body #text .icon {
+        bottom: -7vw;
+        right: 5.5vw;
     }
     .icon .fa {
         font-size: 1.2em!important;
@@ -146,12 +154,14 @@
         font-size: 1.5em;
     }
     body #box #submitReg {
-        top: 35vw;
+        top: 33vw;
+        right: 8vw;
     }
     body #box #submitReg, body #box #loginOk {
         width: 7vw;
         height: 4vw;
         font-size: 1.3em;
+        right: 8vw;
     }
     body #box .change_link {
         top: 40vw;
@@ -164,11 +174,12 @@
         top: 12vw;
     }
     body #box #loginOk {
-        top: 35vw;
+        top: 33vw;
+        right: 8vw;
     }
     body #box #nickname,body #box #email,body #box #password,body #box #nickLog,body #box #passwordLog {
         width: 28vw;
-        font-size:.6em;
+        font-size:1em;
     }
 
 }
@@ -185,17 +196,19 @@
         border-bottom-width: 12vw;
     }
     #container #messages {
-        width: 65vw;
-        height: 55vh;
+        width: 62vw;
+        height: 63vh;
+        margin : 2.5vw 1.5vw 2vw 1.5vw;
     }
     #container .name {
-        top: -4vw;
-        right: 13vw;
+        top: -4.5vw;
+        right: 15vw;
+        font-size: 1.9em;
     }
 
     #text .icon {
         bottom : -6vw;
-        right : 5.5vw!important;
+        right : 5.5vw;
     }
     .icon .fa {
         font-size: 1.6em;
@@ -215,11 +228,11 @@
         right: 2vw;
     }
     #container #logout {
-        top : -5vw;
-        right : 2vw;
+        top : -4.5vw;
+        right : 3vw;
         width : 10vw;
         font-size : 1.4em;
-        height: 6vw;
+        height: 4vw;
     }
     #box .registration, #box .login {
         left: 20vw;
@@ -259,15 +272,16 @@
         font-size: 1.5em;
     }
     #box #loginOk {
-        top: 45vw;
+        top: 42vw;
     }
     #box #submitReg, #box #loginOk {
         width: 8vw;
         height: 5vw;
-        font-size: 2em;
+        font-size: 1.9em;
     }
     #box #submitReg {
-        top: 45vw;
+        top: 44vw;
+        right: 7vw;
     }
     #box .change_link {
         top: 52vw;
@@ -339,10 +353,11 @@ body {
 .icon {
     position: absolute;
     z-index: 100;
-    bottom : -4.3vw;
-    right : .7vw;
+    bottom : -4.5vw;
+    right : .8vw;
     color: #FFF;
     cursor : pointer;
+
 }
 #logout {
     top : -2.3vw;
@@ -381,15 +396,15 @@ body {
 }
 #messages {
     position : absolute;
-    width : 40vw;
+    width : 39vw;
     height :30vw;
     left : .1vw;
     top : .5vw ;
     list-style-type: none;
     padding: 0;
-    margin : 1vw .5vw .5vw .5vw;
+    margin : 2vw 1.5vw 2vw 1.5vw;
     overflow-y: auto;          /*скроллинг по вертикали*/
-    font-size : 1.2em;
+    font-size : 1.5em;
     font-style: italic;
 }
 #messages::-webkit-scrollbar { width: 0 !important }   /*для скрытия полосы прокрутки*/
