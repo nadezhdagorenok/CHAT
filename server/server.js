@@ -132,55 +132,22 @@ io.on('connection', function(socket) {
                         logger.error(error.message);
                     });
             }
-            else {
-                for (let i = 0; i < arr.length; i++) {
-                    if (arr[i] in collectionHello) {
-                        msgBot.msg = collectionHello[arr[i]];
-                        msgBot.username = 'bot';
-                        msgBot.type = collectionHello["type"];
-                        anotherLogger.debug(msgBot.username);
 
-                        messages.insert(msgBot).then((mesBot) => {
-                            anotherLogger.debug('bot in database', mesBot);
-
-                            io.emit('chat message', mesBot.msg, 'bot', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                            anotherLogger.info('bot: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                        })
-                            .catch(error => {
-                                logger.error(error.message);
-                            });
-                    }
-                    else if (arr[i] in collectionPhysics) {
-                        msgBot.msg = collectionPhysics[msgLow];
-                        msgBot.username = 'physicist';
-                        msgBot.type = collectionPhysics["type"];
-                        anotherLogger.debug(msgBot.username);
-
-                        messages.insert(msgBot).then((mesBot) => {
-                            anotherLogger.debug('bot in database', mesBot);
-                            io.emit('chat message', mesBot.msg, 'physicist', mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
-                            anotherLogger.info('physicist: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
-                        })
-                            .catch(error => {
-                                logger.error(error.message);
-                            });
-
-                    }
 
                     else if (arr.length === 4 && arr[1] in collectionMoney && arr[arr.length-1] in collectionMoney) {
+
                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[1]])
                             .then(data => {
                                 anotherLogger.debug(JSON.parse(data));
                                 let item;
                                 let sum; let sum2; let d;
-                                if (collectionMoney[arr[1]] === 298) {
+                                if (collectionMoney[arr[1]] === 298 || collectionMoney[arr[1]] === 290) {
                                     sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
                                     rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[arr.length-1]])
                                         .then(data2 => {
                                             anotherLogger.debug(JSON.parse(data2));
-                                            sum2 = (sum * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                                            sum2 = (sum / (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
                                             d = JSON.parse(data2)['Cur_Abbreviation'];
-
                                             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
                                             anotherLogger.debug(item);
                                             msgBot.msg = item;
@@ -194,12 +161,35 @@ io.on('connection', function(socket) {
                                             });
                                         });
                                 }
+                                else if (collectionMoney[arr[1]] === 293) {
+
+                                    sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/10)*arr[0]).toFixed(2);
+                                    getCurrencyRate(arr, sum);
+
+                                    // rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[arr.length-1]])
+                                    //     .then(data2 => {
+                                    //         anotherLogger.debug(JSON.parse(data2));
+                                    //         sum2 = (sum * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                                    //         d = JSON.parse(data2)['Cur_Abbreviation'];
+                                    //         item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
+                                    //         anotherLogger.debug(item);
+                                    //         msgBot.msg = item;
+                                    //         msgBot.username = 'bank';
+                                    //         msgBot.type = collectionMoney["type"];
+                                    //         anotherLogger.debug(msgBot.username);
+                                    //         messages.insert(msgBot).then((mesBot) => {
+                                    //             anotherLogger.debug('bot in database', mesBot);
+                                    //             io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+                                    //             anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+                                    //         });
+                                    //     });
+                                }
                                 else {
                                     sum = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
                                     rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[arr.length-1]])
                                         .then(data2 => {
                                             anotherLogger.debug(JSON.parse(data2));
-                                            sum2 = (sum * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                                            sum2 = (sum / (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
                                             d = JSON.parse(data2)['Cur_Abbreviation'];
                                             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
                                             anotherLogger.debug(item);
@@ -207,7 +197,6 @@ io.on('connection', function(socket) {
                                             msgBot.username = 'bank';
                                             msgBot.type = collectionMoney["type"];
                                             anotherLogger.debug(msgBot.username);
-
                                             messages.insert(msgBot).then((mesBot) => {
                                                 anotherLogger.debug('bot in database', mesBot);
                                                 io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
@@ -248,13 +237,13 @@ io.on('connection', function(socket) {
                                 logger.error(handleError);
                             });
                     }
-                    else if (arr.length === 2 && arr[i] in collectionMoney){
+                    else if (arr.length === 2 && arr[1] in collectionMoney){
                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[i]])
                             .then(data => {
                                 anotherLogger.debug(JSON.parse(data));
                                 let item;
                                 let sum;
-                                if (collectionMoney[arr[i]] === 298) {
+                                if (collectionMoney[arr[1]] === 298 || arr[1] === 295) {
                                     sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
                                     item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
                                 }
@@ -280,15 +269,45 @@ io.on('connection', function(socket) {
             .catch(handleError => {
                 logger.error(handleError);
             });
-    
+           }
+            else {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] in collectionHello) {
+                        msgBot.msg = collectionHello[arr[i]];
+                        msgBot.username = 'bot';
+                        msgBot.type = collectionHello["type"];
+                        anotherLogger.debug(msgBot.username);
 
+                        messages.insert(msgBot).then((mesBot) => {
+                            anotherLogger.debug('bot in database', mesBot);
 
+                            io.emit('chat message', mesBot.msg, 'bot', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+                            anotherLogger.info('bot: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+                        })
+                            .catch(error => {
+                                logger.error(error.message);
+                            });
+                    }
+                    else if (arr[i] in collectionPhysics) {
+                        msgBot.msg = collectionPhysics[msgLow];
+                        msgBot.username = 'physicist';
+                        msgBot.type = collectionPhysics["type"];
+                        anotherLogger.debug(msgBot.username);
 
+                        messages.insert(msgBot).then((mesBot) => {
+                            anotherLogger.debug('bot in database', mesBot);
+                            io.emit('chat message', mesBot.msg, 'physicist', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+                            anotherLogger.info('physicist: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+                        })
+                            .catch(error => {
+                                logger.error(error.message);
+                            });
 
                     }
+                }//тут поставили
 
 
-                }
+                //}
             }
         });
     });
@@ -331,6 +350,26 @@ server.listen(process.env.PORT || 5000, ()=>{                         // чте�
      if (optionDate < 10) {
          return optionDate = '0' + optionDate;
      }
+     function getCurrencyRate(array, summa){
+         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[array[array.length-1]])
+             .then(data2 => {
+                 anotherLogger.debug(JSON.parse(data2));
+                 sum2 = (summa * (Number(JSON.parse(data2)['Cur_OfficialRate']))).toFixed(2);
+                 d = JSON.parse(data2)['Cur_Abbreviation'];
+                 item = `${array[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum2} ${d} `;
+                 anotherLogger.debug(item);
+                 msgBot.msg = item;
+                 msgBot.username = 'bank';
+                 msgBot.type = collectionMoney["type"];
+                 anotherLogger.debug(msgBot.username);
+                 messages.insert(msgBot).then((mesBot) => {
+                     anotherLogger.debug('bot in database', mesBot);
+                     io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+                     anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+                 });
+             });
+
+     }
  }
 
 const collectionHello = {
@@ -354,7 +393,7 @@ const collectionMoney = {
     "type" : 'money',
     "usd" : 145,
     "$" : 145,
-    "euro" : 292,
+    "eur" : 292,
     "rub" : 298,
     "pln" : 293,
     "uah" : 290,
