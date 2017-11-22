@@ -205,33 +205,6 @@ io.on('connection', function(socket) {
                                         });
                                 }
 
-                        // rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[arr[i]])
-                        //     .then(data => {
-                        //         anotherLogger.debug(JSON.parse(data));
-                        //         let item;
-                        //         let sum;
-                        //         if (collectionMoney[arr[i]] === 298) {
-                        //             sum = ((Number(JSON.parse(data)['Cur_OfficialRate'])/100)*arr[0]).toFixed(2);
-                        //             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
-                        //         }
-                        //         else {
-                        //             sum = (Number(JSON.parse(data)['Cur_OfficialRate'])*arr[0]).toFixed(2);
-                        //             item = `${arr[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${sum} BYN `;
-                        //         }
-                        //         anotherLogger.debug(item);
-                        //         msgBot.msg = item;
-                        //         msgBot.username = 'bank';
-                        //         msgBot.type = collectionMoney["type"];
-                        //         anotherLogger.debug(msgBot.username);
-                        //
-                        //         messages.insert(msgBot).then((mesBot) => {
-                        //             anotherLogger.debug('bot in database', mesBot);
-                        //             io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-                        //             anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-                        //         })
-                        //             .catch(error => {
-                        //                 logger.error(error.message);
-                        //             });
                             })
                             .catch(handleError => {
                                 logger.error(handleError);
