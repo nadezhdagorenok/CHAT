@@ -245,7 +245,7 @@ $(function () {
             liTime.classList.add('time');
 
             if (type == "href") {
-                $('#messages').append($('<li>').text(name + '  :  ' + mesUser + '! Catch link ').add(("<a href=\"" + msg + "\">\"" + msg + "\"</a>")).addClass('news'));
+                $('#messages').append($('<li>').text(name + '  :  ' + mesUser + '! Catch link ').add(("<a href=\"" + msg + "\" target=\"_blank\">\"" + msg + "\"</a>")).addClass('news'));
                 document.getElementById('messages').appendChild(liTime);
             }
             else if(type === 'money'|| type === 'physic'){
