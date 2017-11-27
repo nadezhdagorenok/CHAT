@@ -96,214 +96,212 @@ io.on('connection', function(socket) {
             .then((mes) => {
                 anotherLogger.info('In DB  ' + mes.username + ' : ' + mes.msg + '   ' + mes.time + '  ' + mes.shortDate);
                 io.emit('chat message', mes.msg, mes.username, mes.type, mes.time, mes.shortDate);
-
                 let msgLow = mes.msg.toLowerCase();
                 anotherLogger.debug(msgLow);
-
-                let msgBot={};
-                msgBot.date = new Date;
-                msgBot.time = (new Date()).toLocaleTimeString();
-                msgBot.shortDate = (new Date()).toDateString();
-                let messageArray = msgLow.split(' ');
-
-                if (msgLow in collectionNews) {
-                    msgBot.msg = collectionNews[msgLow];
-                    msgBot.username = 'journalist';
-                    msgBot.type = collectionNews["type"];
-                    anotherLogger.debug(msgBot.username);
-
-                    messages.insert(msgBot)
-                        .then((mesBot) => {
-                            anotherLogger.debug('bot in database', mesBot);
-                            io.emit('chat message', mesBot.msg, 'journalist', mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
-                            anotherLogger.info('journalist: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
-                        })
-                        .catch(error => {
-                            logger.error(error.message);
-                        });
-                }
-                else if (msgLow in collectionProperty){
-                    msgBot.msg = collectionProperty[msgLow];
-                    msgBot.username = 'agent';
-                    msgBot.type = collectionProperty["type"];
-                    anotherLogger.debug(msgBot.username);
-
-                    messages.insert(msgBot)
-                        .then((mesBot) => {
-                            anotherLogger.debug('bot in database', mesBot);
-                            io.emit('chat message', mesBot.msg, 'agent', mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
-                            anotherLogger.info('agent: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
+                return msgLow;
+            })
+            .then((msg) => {
+            return compareMessageWithBot(msg);
+            })
+            .then((messageBot) => {
+                messages.insert(messageBot)
+                    .then((mesBot) => {
+                       emitChatMessage(mesBot, message.username);
                     })
                     .catch(error => {
                         logger.error(error.message);
                     });
-                }
 
-                else if (messageArray.length === 4 && messageArray[1] in collectionMoney && messageArray[messageArray.length-1] in collectionMoney) {
-
-                        let currencyValue = messageArray[0];
-                        let currencyInitial = messageArray[1];
-                        let currencyDestination = messageArray[messageArray.length-1];
-                        let currencyRateMessage;
-                        let currencyInitialValueToByn;
-                        let bynToCurrencyDestination;
+            })
 
 
-                        rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
-                            .then(currencyInitialBankData => {
-                                anotherLogger.debug(JSON.parse(currencyInitialBankData));
-
-                                if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 290) {
-
-                                    currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate'])/100) * currencyValue).toFixed(2);
-
-                                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                                        .then(currencyDestinationBankData => {
-                                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-                                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                                            anotherLogger.debug(currencyRateMessage);
-                                            msgBot.msg = currencyRateMessage;
-                                            msgBot.username = 'bank';
-                                            msgBot.type = collectionMoney["type"];
-                                            anotherLogger.debug(msgBot.username);
-
-                                            messages.insert(msgBot)
-                                                .then((mesBot) => {
-                                                    anotherLogger.debug('bot in database', mesBot);
-                                                    io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-                                                    anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-                                                });
-                                        });
-                                }
-                                else if (collectionMoney[currencyInitial] === 293) {
-
-                                    currencyInitialValueToByn = ((Number(JSON.parse(data)['Cur_OfficialRate']) / 10) * currencyValue).toFixed(2);
 
 
-                                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                                        .then(currencyDestinationBankData => {
-                                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-
-                                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                                            anotherLogger.debug(currencyRateMessage);
-                                            msgBot.msg = currencyRateMessage;
-                                            msgBot.username = 'bank';
-                                            msgBot.type = collectionMoney["type"];
-                                            anotherLogger.debug(msgBot.username);
-                                            messages.insert(msgBot)
-                                                .then((mesBot) => {
-                                                    anotherLogger.debug('bot in database', mesBot);
-                                                    io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-                                                    anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-                                            });
-                                        });
-                                }
-                                else {
-                                    currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate'])*currencyValue).toFixed(2);
-                                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                                        .then(currencyDestinationBankData => {
-                                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-
-                                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                                            anotherLogger.debug(currencyRateMessage);
-                                            msgBot.msg = currencyRateMessage;
-                                            msgBot.username = 'bank';
-                                            msgBot.type = collectionMoney["type"];
-                                            anotherLogger.debug(msgBot.username);
-                                            messages.insert(msgBot)
-                                                .then((mesBot) => {
-                                                    anotherLogger.debug('bot in database', mesBot);
-                                                    io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-                                                    anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-                                                });
-                                        });
-                                }
-
-                            })
-                            .catch(handleError => {
-                                logger.error(handleError);
-                            });
-                    }
-                    else if (messageArray.length === 2 && messageArray[1] in collectionMoney){
-                        let currencyRateMessage;
-                        let currencyInitial = messageArray[1];
-                        let currencyInitialValueToByn;
-                        let currencyValue = messageArray[0];
-                        rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
-                            .then(currencyInitialBankData => {
-                                anotherLogger.debug(JSON.parse(currencyInitialBankData));
-                                if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 295) {
-                                    currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) / 100) * currencyValue).toFixed(2);
-                                    currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
-                                }
-                                else {
-                                    currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) * currencyValue).toFixed(2);
-                                    currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
-                                }
-                                anotherLogger.debug(currencyRateMessage);
-                                msgBot.msg = currencyRateMessage;
-                                msgBot.username = 'bank';
-                                msgBot.type = collectionMoney["type"];
-                                anotherLogger.debug(msgBot.username);
-
-                                messages.insert(msgBot)
-                                    .then((mesBot) => {
-                                        anotherLogger.debug('bot in database', mesBot);
-                                        io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-                                        anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-                                    })
-                                    .catch(error => {
-                                        logger.error(error.message);
-                                    });
-                            })
-                            .catch(handleError => {
-                                logger.error(handleError.message);
-                            });
-                    }
-                else {
-                    for (let i = 0; i < messageArray.length; i++) {
-                        if (messageArray[i] in collectionHello) {
-                            msgBot.msg = collectionHello[messageArray[i]];
-                            msgBot.username = 'bot';
-                            msgBot.type = collectionHello["type"];
-                            anotherLogger.debug(msgBot.username);
-
-                            messages.insert(msgBot)
-                                .then((mesBot) => {
-                                anotherLogger.debug('bot in database', mesBot);
-
-                                io.emit('chat message', mesBot.msg, 'bot', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                                anotherLogger.info('bot: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                                })
-                                .catch(error => {
-                                    logger.error(error.message);
-                                });
-                        }
-                        else if (messageArray[i] in collectionPhysics) {
-                            msgBot.msg = collectionPhysics[msgLow];
-                            msgBot.username = 'physicist';
-                            msgBot.type = collectionPhysics["type"];
-                            anotherLogger.debug(msgBot.username);
-
-                            messages.insert(msgBot)
-                                .then((mesBot) => {
-                                    anotherLogger.debug('bot in database', mesBot);
-                                    io.emit('chat message', mesBot.msg, 'physicist', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                                    anotherLogger.info('physicist: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
-                                })
-                                .catch(error => {
-                                    logger.error(error.message);
-                                });
-
-                        }
-                    }
 
 
-                }
-            });
+
+            //     else if (msgLow in collectionProperty){
+            //         msgBot.msg = collectionProperty[msgLow];
+            //         msgBot.username = 'agent';
+            //         msgBot.type = collectionProperty["type"];
+            //         anotherLogger.debug(msgBot.username);
+            //
+            //         messages.insert(msgBot)
+            //             .then((mesBot) => {
+            //                 anotherLogger.debug('bot in database', mesBot);
+            //                 io.emit('chat message', mesBot.msg, 'agent', mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
+            //                 anotherLogger.info('agent: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time,  msgBot.shortDate, mes.username);
+            //         })
+            //         .catch(error => {
+            //             logger.error(error.message);
+            //         });
+            //     }
+            //
+            //     else if (messageArray.length === 4 && messageArray[1] in collectionMoney && messageArray[messageArray.length-1] in collectionMoney) {
+            //
+            //             let currencyValue = messageArray[0];
+            //             let currencyInitial = messageArray[1];
+            //             let currencyDestination = messageArray[messageArray.length-1];
+            //             let currencyRateMessage;
+            //             let currencyInitialValueToByn;
+            //             let bynToCurrencyDestination;
+            //
+            //
+            //             rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
+            //                 .then(currencyInitialBankData => {
+            //                     anotherLogger.debug(JSON.parse(currencyInitialBankData));
+            //
+            //                     if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 290) {
+            //
+            //                         currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate'])/100) * currencyValue).toFixed(2);
+            //
+            //                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+            //                             .then(currencyDestinationBankData => {
+            //                                 anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+            //                                 bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+            //                                 currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+            //                                 anotherLogger.debug(currencyRateMessage);
+            //                                 msgBot.msg = currencyRateMessage;
+            //                                 msgBot.username = 'bank';
+            //                                 msgBot.type = collectionMoney["type"];
+            //                                 anotherLogger.debug(msgBot.username);
+            //
+            //                                 messages.insert(msgBot)
+            //                                     .then((mesBot) => {
+            //                                         anotherLogger.debug('bot in database', mesBot);
+            //                                         io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                         anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                     });
+            //                             });
+            //                     }
+            //                     else if (collectionMoney[currencyInitial] === 293) {
+            //
+            //                         currencyInitialValueToByn = ((Number(JSON.parse(data)['Cur_OfficialRate']) / 10) * currencyValue).toFixed(2);
+            //
+            //
+            //                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+            //                             .then(currencyDestinationBankData => {
+            //                                 anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+            //                                 bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+            //
+            //                                 currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+            //                                 anotherLogger.debug(currencyRateMessage);
+            //                                 msgBot.msg = currencyRateMessage;
+            //                                 msgBot.username = 'bank';
+            //                                 msgBot.type = collectionMoney["type"];
+            //                                 anotherLogger.debug(msgBot.username);
+            //                                 messages.insert(msgBot)
+            //                                     .then((mesBot) => {
+            //                                         anotherLogger.debug('bot in database', mesBot);
+            //                                         io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                         anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                 });
+            //                             });
+            //                     }
+            //                     else {
+            //                         currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate'])*currencyValue).toFixed(2);
+            //                         rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+            //                             .then(currencyDestinationBankData => {
+            //                                 anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+            //                                 bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+            //
+            //                                 currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+            //                                 anotherLogger.debug(currencyRateMessage);
+            //                                 msgBot.msg = currencyRateMessage;
+            //                                 msgBot.username = 'bank';
+            //                                 msgBot.type = collectionMoney["type"];
+            //                                 anotherLogger.debug(msgBot.username);
+            //                                 messages.insert(msgBot)
+            //                                     .then((mesBot) => {
+            //                                         anotherLogger.debug('bot in database', mesBot);
+            //                                         io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                         anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+            //                                     });
+            //                             });
+            //                     }
+            //
+            //                 })
+            //                 .catch(handleError => {
+            //                     logger.error(handleError);
+            //                 });
+            //         }
+            //         else if (messageArray.length === 2 && messageArray[1] in collectionMoney){
+            //             let currencyRateMessage;
+            //             let currencyInitial = messageArray[1];
+            //             let currencyInitialValueToByn;
+            //             let currencyValue = messageArray[0];
+            //             rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
+            //                 .then(currencyInitialBankData => {
+            //                     anotherLogger.debug(JSON.parse(currencyInitialBankData));
+            //                     if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 295) {
+            //                         currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) / 100) * currencyValue).toFixed(2);
+            //                         currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
+            //                     }
+            //                     else {
+            //                         currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) * currencyValue).toFixed(2);
+            //                         currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
+            //                     }
+            //                     anotherLogger.debug(currencyRateMessage);
+            //                     msgBot.msg = currencyRateMessage;
+            //                     msgBot.username = 'bank';
+            //                     msgBot.type = collectionMoney["type"];
+            //                     anotherLogger.debug(msgBot.username);
+            //
+            //                     messages.insert(msgBot)
+            //                         .then((mesBot) => {
+            //                             anotherLogger.debug('bot in database', mesBot);
+            //                             io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
+            //                             anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
+            //                         })
+            //                         .catch(error => {
+            //                             logger.error(error.message);
+            //                         });
+            //                 })
+            //                 .catch(handleError => {
+            //                     logger.error(handleError.message);
+            //                 });
+            //         }
+            //     else {
+            //         for (let i = 0; i < messageArray.length; i++) {
+            //             if (messageArray[i] in collectionHello) {
+            //                 msgBot.msg = collectionHello[messageArray[i]];
+            //                 msgBot.username = 'bot';
+            //                 msgBot.type = collectionHello["type"];
+            //                 anotherLogger.debug(msgBot.username);
+            //
+            //                 messages.insert(msgBot)
+            //                     .then((mesBot) => {
+            //                     anotherLogger.debug('bot in database', mesBot);
+            //
+            //                     io.emit('chat message', mesBot.msg, 'bot', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+            //                     anotherLogger.info('bot: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+            //                     })
+            //                     .catch(error => {
+            //                         logger.error(error.message);
+            //                     });
+            //             }
+            //             else if (messageArray[i] in collectionPhysics) {
+            //                 msgBot.msg = collectionPhysics[msgLow];
+            //                 msgBot.username = 'physicist';
+            //                 msgBot.type = collectionPhysics["type"];
+            //                 anotherLogger.debug(msgBot.username);
+            //
+            //                 messages.insert(msgBot)
+            //                     .then((mesBot) => {
+            //                         anotherLogger.debug('bot in database', mesBot);
+            //                         io.emit('chat message', mesBot.msg, 'physicist', mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+            //                         anotherLogger.info('physicist: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate, mes.username);
+            //                     })
+            //                     .catch(error => {
+            //                         logger.error(error.message);
+            //                     });
+            //
+            //             }
+            //         }
+            //
+            //
+            //     }
+            // });
     });
 
     socket.on('insert user', function (logInfo) {
@@ -339,6 +337,124 @@ server.listen(process.env.PORT || 5000, () => {                         // чт�
 });
 
 
+function compareMessageWithBot(msg) {
+
+    let messageArray = msg.split(' ');
+
+    if (msg in collectionNews) {
+        return createBotMessage(collectionNews[msg], 'journalist', collectionNews);
+    }
+    else if (msg in collectionProperty){
+        return createBotMessage(collectionProperty[msg], 'agent', collectionProperty);
+    }
+    else if (messageArray.length === 4 && messageArray[1] in collectionMoney && messageArray[messageArray.length-1] in collectionMoney) {
+        let currencyValue = messageArray[0];
+        let currencyInitial = messageArray[1];
+        let currencyDestination = messageArray[messageArray.length-1];
+        let currencyRateMessage;
+        let currencyInitialValueToByn;
+        let bynToCurrencyDestination;
+
+        rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
+            .then(currencyInitialBankData => {
+                anotherLogger.debug(JSON.parse(currencyInitialBankData));
+                if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 290) {
+                    currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) / 100) * currencyValue).toFixed(2);
+
+                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+                        .then(currencyDestinationBankData => {
+                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+
+                            return createBotMessage(currencyRateMessage, 'bank', collectionMoney);
+                        })
+                }
+                else if (collectionMoney[currencyInitial] === 293) {
+
+                    currencyInitialValueToByn = ((Number(JSON.parse(data)['Cur_OfficialRate']) / 10) * currencyValue).toFixed(2);
+                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+                        .then(currencyDestinationBankData => {
+                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+
+                            return createBotMessage(currencyRateMessage, 'bank', collectionMoney);
+                        });
+                }
+                else {
+                    currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) * currencyValue).toFixed(2);
+                    rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
+                        .then(currencyDestinationBankData => {
+                            anotherLogger.debug(JSON.parse(currencyDestinationBankData));
+                            bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
+                            currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
+
+                            return createBotMessage(currencyRateMessage, 'bank', collectionMoney);
+                        });
+                }
+
+            })
+            .catch(handleError => {
+                logger.error(handleError);
+            });
+    }
+    else if (messageArray.length === 2 && messageArray[1] in collectionMoney){
+        let currencyRateMessage;
+        let currencyInitial = messageArray[1];
+        let currencyInitialValueToByn;
+        let currencyValue = messageArray[0];
+        rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
+            .then(currencyInitialBankData => {
+                anotherLogger.debug(JSON.parse(currencyInitialBankData));
+                if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 295) {
+                    currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) / 100) * currencyValue).toFixed(2);
+                    currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
+
+                }
+                else {
+                    currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankData)['Cur_OfficialRate']) * currencyValue).toFixed(2);
+                    currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankData)['Cur_Abbreviation']}  =  ${currencyInitialValueToByn} BYN `;
+                }
+                return currencyRateMessage;
+            })
+            .then((currencyRateMessageBank) => {
+                return createBotMessage(currencyRateMessageBank, 'bank', collectionMoney);
+            })
+
+    }
+    else {
+            for (let i = 0; i < messageArray.length; i++) {
+                if (messageArray[i] in collectionHello) {
+                    return createBotMessage(collectionHello[messageArray[i]], 'bot', collectionHello);
+                }
+                else if (messageArray[i] in collectionPhysics) {
+                    return createBotMessage(collectionPhysics[messageArray[i]], 'physicist', collectionPhysics);
+                }
+            }
+        }
+
+}
+
+function createBotMessage(mes, botName, collection){
+    anotherLogger.debug(mes);
+    let msgBot = {};
+    msgBot.date = new Date;
+    msgBot.time = (new Date()).toLocaleTimeString();
+    msgBot.shortDate = (new Date()).toDateString();
+    msgBot.msg = mes;
+    msgBot.username = botName;
+    msgBot.type = collection["type"];
+    anotherLogger.debug(msgBot.username);
+    return msgBot;
+}
+
+function emitChatMessage(botMessage, username){
+    anotherLogger.debug('bot in database', botMessage);
+    io.emit('chat message', botMessage.msg, botMessage.username, botMessage.type, botMessage.time,  botMessage.shortDate, username);
+    anotherLogger.info('botMessage: ' + botMessage.username + ' | Message: ' + botMessage.msg + '|||  ' + botMessage.type, botMessage.time,  botMessage.shortDate, username);
+}
+
  function getOptionDate(optionDate) {
      if (optionDate < 10) {
          return optionDate = '0' + optionDate;
@@ -354,25 +470,7 @@ server.listen(process.env.PORT || 5000, () => {                         // чт�
          //             anotherLogger.error(error.message);
          //         });
          // }
-         //
-         // function getCurrencyConversion (currencyBankData, ){
-         //
-         //             bynToCurrencyDestination = (summa * (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-         //             d = JSON.parse(currencyDestinationBankData)['Cur_Abbreviation'];
-         //             currencyRateMessage = `${array[0]}  ${JSON.parse(data)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${d} `;
-         //             anotherLogger.debug(currencyRateMessage);
-         //             msgBot.msg = currencyRateMessage;
-         //             msgBot.username = 'bank';
-         //             msgBot.type = collectionMoney["type"];
-         //             anotherLogger.debug(msgBot.username);
-         //             messages.insert(msgBot).then((mesBot) => {
-         //                 anotherLogger.debug('bot in database', mesBot);
-         //                 io.emit('chat message', mesBot.msg, 'bank', mesBot.type, mesBot.time, msgBot.shortDate);
-         //                 anotherLogger.info('bank: ' + mesBot.username + ' | Message: ' + mesBot.msg + '|||  ' + mesBot.type, mesBot.time, msgBot.shortDate);
-         //             });
-         //         });
-         //
-         // }
+
 
 
 const collectionHello = {
