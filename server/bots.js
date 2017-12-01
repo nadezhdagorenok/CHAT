@@ -78,6 +78,9 @@ function compareMessageWithBot(msg) {
             .then((currencyRateMessageBank) => {
                 return createBotMessage(currencyRateMessageBank, 'bank', collectionMoney);
             })
+            .catch(handleError => {
+                logger.error(handleError);
+            });
     }
     else {
         for (let i = 0; i < messageArray.length; i++) {
