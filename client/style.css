@@ -84,9 +84,13 @@
         width: 10vw!important;
         font-size: .7em!important;
     }
-    #container #text .icon{
-        bottom: -8vw!important;
-        right: 4vw!important;
+    /*#container #text .icon{*/
+        /*bottom: -8vw!important;*/
+        /*right: 4vw!important;*/
+    /*}*/
+    #container form .icon {
+        bottom: -6.5vw!important;
+        right: 4.8vw!important;
     }
 
 }
@@ -116,7 +120,7 @@
         font-size : 3em;
         top: -8vw;
     }
-    #container #text .icon {
+    #container form .icon {
         bottom: -7vw;
         right: 5.5vw;
     }
