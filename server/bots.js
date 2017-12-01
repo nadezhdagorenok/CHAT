@@ -17,6 +17,12 @@ const anotherLogger = log4js.getLogger('another');
 function compareMessageWithBot(msg) {
 
     let messageArray = msg.split(' ');
+    let currencyRateMessage;
+    let currencyInitial = messageArray[1];
+    let currencyInitialValueToByn;
+    let currencyValue = messageArray[0];
+    let currencyDestination = messageArray[messageArray.length-1];
+    let bynToCurrencyDestination;
 
     if (msg in collectionNews) {
         return createBotMessage(collectionNews[msg], 'journalist', collectionNews);
@@ -25,12 +31,6 @@ function compareMessageWithBot(msg) {
         return createBotMessage(collectionProperty[msg], 'agent', collectionProperty);
     }
     else if (messageArray.length === 4 && messageArray[1] in collectionMoney && messageArray[messageArray.length-1] in collectionMoney) {
-        let currencyValue = messageArray[0];
-        let currencyInitial = messageArray[1];
-        let currencyDestination = messageArray[messageArray.length-1];
-        let currencyRateMessage;
-        let currencyInitialValueToByn;
-        let bynToCurrencyDestination;
 
         return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
             .then(currencyInitialBankData => {
@@ -41,46 +41,16 @@ function compareMessageWithBot(msg) {
                 if (collectionMoney[currencyInitial] === 298 || collectionMoney[currencyInitial] === 290) {
                     currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankInfo)['Cur_OfficialRate']) / 100) * currencyValue).toFixed(2);
                     anotherLogger.debug(currencyInitialValueToByn);
-
                     return getCurrencyRate(currencyDestination, currencyInitialValueToByn, currencyValue, currencyInitialBankInfo);
-                    // return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                    //     .then(currencyDestinationBankData => {
-                    //         anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                    //         bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-                    //         anotherLogger.debug(bynToCurrencyDestination);
-                    //         currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankInfo)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                    //         anotherLogger.debug(currencyRateMessage);
-                    //         return currencyRateMessage;
-                    //
-                    //     })
                 }
                 else if (collectionMoney[currencyInitial] === 293) {
-
                     currencyInitialValueToByn = ((Number(JSON.parse(currencyInitialBankInfo)['Cur_OfficialRate']) / 10) * currencyValue).toFixed(2);
                     return getCurrencyRate(currencyDestination, currencyInitialValueToByn, currencyValue, currencyInitialBankInfo);
-                    // return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                    //     .then(currencyDestinationBankData => {
-                    //         anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                    //         bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-                    //         currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankInfo)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                    //         return currencyRateMessage;
-                    //
-                    //     });
                 }
                 else {
                     currencyInitialValueToByn = (Number(JSON.parse(currencyInitialBankInfo)['Cur_OfficialRate']) * currencyValue).toFixed(2);
                     return getCurrencyRate(currencyDestination, currencyInitialValueToByn, currencyValue, currencyInitialBankInfo);
-                    // return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyDestination])
-                    //     .then(currencyDestinationBankData => {
-                    //         anotherLogger.debug(JSON.parse(currencyDestinationBankData));
-                    //         bynToCurrencyDestination = (currencyInitialValueToByn / (Number(JSON.parse(currencyDestinationBankData)['Cur_OfficialRate']))).toFixed(2);
-                    //         currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankInfo)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
-                    //         return currencyRateMessage;
-                    //
-                    //     });
                 }
-
-
             })
             .then ((currencyRateMessageBank) => {
                 return createBotMessage(currencyRateMessageBank, 'bank', collectionMoney);
@@ -90,10 +60,7 @@ function compareMessageWithBot(msg) {
             });
     }
     else if (messageArray.length === 2 && messageArray[1] in collectionMoney){
-        let currencyRateMessage;
-        let currencyInitial = messageArray[1];
-        let currencyInitialValueToByn;
-        let currencyValue = messageArray[0];
+
         return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyInitial])
             .then(currencyInitialBankData => {
                 anotherLogger.debug(JSON.parse(currencyInitialBankData));
@@ -111,7 +78,6 @@ function compareMessageWithBot(msg) {
             .then((currencyRateMessageBank) => {
                 return createBotMessage(currencyRateMessageBank, 'bank', collectionMoney);
             })
-
     }
     else {
         for (let i = 0; i < messageArray.length; i++) {
@@ -140,7 +106,6 @@ function createBotMessage(mes, botName, collection){
 }
 
 function getCurrencyRate(currencyEnd, firstCurencyExchange, currencyValue, currencyInitialBankInfo) {
-
    return rp('http://www.nbrb.by/API/ExRates/Rates/' + collectionMoney[currencyEnd])
         .then(currencyDestinationBankData => {
             anotherLogger.debug(JSON.parse(currencyDestinationBankData));
@@ -150,7 +115,6 @@ function getCurrencyRate(currencyEnd, firstCurencyExchange, currencyValue, curre
             currencyRateMessage = `${currencyValue}  ${JSON.parse(currencyInitialBankInfo)['Cur_Abbreviation']}  =  ${bynToCurrencyDestination} ${JSON.parse(currencyDestinationBankData)['Cur_Abbreviation']} `;
             anotherLogger.debug(currencyRateMessage);
             return currencyRateMessage;
-
         })
 }
 
